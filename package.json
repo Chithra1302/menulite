@@ -1,0 +1,13 @@
+{
+  "name": "menulite",
+  "version": "1.0.0",
+  "description": "A lightweight backend API built using TypeScript to manage cafe menu items, pricing, categories, and availability.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
