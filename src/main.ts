@@ -1,28 +1,59 @@
 import {
   FoodCategory,
-  MenuItem,
 } from "./menu/interfaces/menu-item.interface";
 
 import { MenuRepository } from "./menu/menu.repository";
 
+import { MenuService } from "./menu/menu.service";
+
 const menuRepository = new MenuRepository();
 
-const coffee: MenuItem = {
-  id: "1",
+const menuService = new MenuService(
+  menuRepository
+);
 
-  name: "Cold Coffee",
+async function bootstrap() {
 
-  category: FoodCategory.BEVERAGE,
+  const coffee =
+    await menuService.createMenuItem({
 
-  price: 120,
+      id: "1",
 
-  available: true,
+      name: "Cold Coffee",
 
-  createdAt: new Date(),
+      category: FoodCategory.BEVERAGE,
 
-  updatedAt: new Date(),
-};
+      price: 120,
 
-menuRepository.create(coffee);
+      available: true,
+    });
 
-console.log(menuRepository.findAll());
+  console.log("Created Item:");
+  console.log(coffee);
+
+  const menuItems =
+    await menuService.getAllMenuItems();
+
+  console.log("\nAll Menu Items:");
+  console.log(menuItems);
+
+  const item =
+    await menuService.getMenuItemById("1");
+
+  console.log("\nFind By ID:");
+  console.log(item);
+
+  const deleted =
+    await menuService.deleteMenuItem("1");
+
+  console.log("\nDelete Status:");
+  console.log(deleted);
+
+  const remainingItems =
+    await menuService.getAllMenuItems();
+
+  console.log("\nRemaining Items:");
+  console.log(remainingItems);
+}
+
+bootstrap();
