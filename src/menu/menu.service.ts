@@ -1,8 +1,10 @@
 import { MenuRepository } from "./menu.repository";
 
-import {
-  MenuItem,
-} from "./interfaces/menu-item.interface";
+import { MenuItem } from "./interfaces/menu-item.interface";
+
+import { CreateMenuItemDto } from "./dto/create-menu-item.dto";
+
+import { UpdateMenuItemDto } from "./dto/update-menu-item.dto";
 
 export class MenuService {
   constructor(
@@ -10,12 +12,12 @@ export class MenuService {
   ) {}
 
   async createMenuItem(
-    data: Omit<MenuItem, "createdAt" | "updatedAt">
+    dto: CreateMenuItemDto
   ): Promise<MenuItem> {
     await this.simulateDatabaseDelay();
 
     const newMenuItem: MenuItem = {
-      ...data,
+      ...dto,
 
       createdAt: new Date(),
 
@@ -37,6 +39,20 @@ export class MenuService {
     await this.simulateDatabaseDelay();
 
     return this.menuRepository.findById(id);
+  }
+
+  async updateMenuItem(
+    id: string,
+    dto: UpdateMenuItemDto
+  ): Promise<MenuItem | undefined> {
+    await this.simulateDatabaseDelay();
+
+    const updated = this.menuRepository.update(id, {
+      ...dto,
+      updatedAt: new Date(),
+    });
+
+    return updated;
   }
 
   async deleteMenuItem(

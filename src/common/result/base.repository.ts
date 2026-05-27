@@ -15,6 +15,23 @@ export class BaseRepository<T extends { id: string }> {
     return item;
   }
 
+  update(id: string, data: Partial<T>): T | undefined {
+    const index = this.items.findIndex(
+      (item) => item.id === id
+    );
+
+    if (index === -1) {
+      return undefined;
+    }
+
+    this.items[index] = {
+      ...this.items[index],
+      ...data,
+    };
+
+    return this.items[index];
+  }
+
   delete(id: string): boolean {
     const index = this.items.findIndex(
       (item) => item.id === id
