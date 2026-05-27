@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "strict": true,
+
+    "esModuleInterop": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "baseUrl": "./src",
+
+    "paths": {
+      "@common/*": ["common/*"],
+      "@menu/*": ["menu/*"]
+    },
+
+    "types": ["node"],
+
+    "ignoreDeprecations": "6.0"
+  },
+
+  "include": ["src/**/*"],
+
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

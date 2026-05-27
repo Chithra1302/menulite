@@ -1,13 +1,41 @@
 {
   "name": "menulite",
   "version": "1.0.0",
-  "description": "A lightweight backend API built using TypeScript to manage cafe menu items, pricing, categories, and availability.",
-  "main": "index.js",
+  "description": "Lightweight cafe menu management backend API built with TypeScript",
+  "main": "dist/main.js",
+
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/main.ts",
+    "dev": "nodemon",
+    "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
+
+  "keywords": [
+    "typescript",
+    "nestjs",
+    "backend",
+    "api",
+    "menu-management"
+  ],
+
+  "author": "Chithra KG",
+
   "license": "ISC",
-  "type": "commonjs"
+
+  "type": "commonjs",
+
+  "dependencies": {
+    "@nestjs/common": "^11.1.24",
+    "@nestjs/core": "^11.1.24",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "zod": "^4.4.3"
+  },
+
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
 }
