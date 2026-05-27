@@ -1,13 +1,29 @@
+import { z } from "zod";
+
 import { FoodCategory } from "../interfaces/menu-item.interface";
 
+export const CreateMenuItemSchema = z.object({
+  id: z.string().min(1, "ID is required"),
+
+  name: z.string().min(1, "Name is required"),
+
+  category: z.nativeEnum(FoodCategory, {
+    message: "Invalid food category",
+  }),
+
+  price: z.number().positive("Price must be a positive number"),
+
+  available: z.boolean(),
+});
+
 export class CreateMenuItemDto {
-  id: string;
+  declare id: string;
 
-  name: string;
+  declare name: string;
 
-  category: FoodCategory;
+  declare category: FoodCategory;
 
-  price: number;
+  declare price: number;
 
-  available: boolean;
+  declare available: boolean;
 }

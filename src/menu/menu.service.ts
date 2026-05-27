@@ -2,9 +2,19 @@ import { MenuRepository } from "./menu.repository";
 
 import { MenuItem } from "./interfaces/menu-item.interface";
 
-import { CreateMenuItemDto } from "./dto/create-menu-item.dto";
+import {
+  CreateMenuItemDto,
+  CreateMenuItemSchema,
+} from "./dto/create-menu-item.dto";
 
-import { UpdateMenuItemDto } from "./dto/update-menu-item.dto";
+import {
+  UpdateMenuItemDto,
+  UpdateMenuItemSchema,
+} from "./dto/update-menu-item.dto";
+
+import { NotFoundError } from "../common/errors/not-found.error";
+
+import { ValidationError } from "../common/errors/validation.error";
 
 export class MenuService {
   constructor(
@@ -16,8 +26,18 @@ export class MenuService {
   ): Promise<MenuItem> {
     await this.simulateDatabaseDelay();
 
+    const result = CreateMenuItemSchema.safeParse(dto);
+
+    if (!result.success) {
+      const issues = result.error.issues.map(
+        (i) => i.message
+      );
+
+      throw new ValidationError(issues);
+    }
+
     const newMenuItem: MenuItem = {
-      ...dto,
+      ...result.data,
 
       createdAt: new Date(),
 
@@ -35,22 +55,42 @@ export class MenuService {
 
   async getMenuItemById(
     id: string
-  ): Promise<MenuItem | undefined> {
+  ): Promise<MenuItem> {
     await this.simulateDatabaseDelay();
 
-    return this.menuRepository.findById(id);
+    const item = this.menuRepository.findById(id);
+
+    if (!item) {
+      throw new NotFoundError("MenuItem", id);
+    }
+
+    return item;
   }
 
   async updateMenuItem(
     id: string,
     dto: UpdateMenuItemDto
-  ): Promise<MenuItem | undefined> {
+  ): Promise<MenuItem> {
     await this.simulateDatabaseDelay();
 
+    const result = UpdateMenuItemSchema.safeParse(dto);
+
+    if (!result.success) {
+      const issues = result.error.issues.map(
+        (i) => i.message
+      );
+
+      throw new ValidationError(issues);
+    }
+
     const updated = this.menuRepository.update(id, {
-      ...dto,
+      ...result.data,
       updatedAt: new Date(),
     });
+
+    if (!updated) {
+      throw new NotFoundError("MenuItem", id);
+    }
 
     return updated;
   }
@@ -60,7 +100,13 @@ export class MenuService {
   ): Promise<boolean> {
     await this.simulateDatabaseDelay();
 
-    return this.menuRepository.delete(id);
+    const deleted = this.menuRepository.delete(id);
+
+    if (!deleted) {
+      throw new NotFoundError("MenuItem", id);
+    }
+
+    return deleted;
   }
 
   private async simulateDatabaseDelay(): Promise<void> {

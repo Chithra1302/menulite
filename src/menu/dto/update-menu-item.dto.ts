@@ -1,11 +1,30 @@
+import { z } from "zod";
+
 import { FoodCategory } from "../interfaces/menu-item.interface";
 
+export const UpdateMenuItemSchema = z.object({
+  name: z.string().min(1, "Name cannot be empty").optional(),
+
+  category: z
+    .nativeEnum(FoodCategory, {
+      message: "Invalid food category",
+    })
+    .optional(),
+
+  price: z
+    .number()
+    .positive("Price must be a positive number")
+    .optional(),
+
+  available: z.boolean().optional(),
+});
+
 export class UpdateMenuItemDto {
-  name?: string;
+  declare name?: string;
 
-  category?: FoodCategory;
+  declare category?: FoodCategory;
 
-  price?: number;
+  declare price?: number;
 
-  available?: boolean;
+  declare available?: boolean;
 }
