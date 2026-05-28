@@ -1,3 +1,5 @@
+import { Injectable } from "@nestjs/common";
+
 import { MenuRepository } from "./menu.repository";
 
 import { MenuItem } from "./interfaces/menu-item.interface";
@@ -16,6 +18,7 @@ import { NotFoundError } from "../common/errors/not-found.error";
 
 import { ValidationError } from "../common/errors/validation.error";
 
+@Injectable()
 export class MenuService {
   constructor(
     private readonly menuRepository: MenuRepository

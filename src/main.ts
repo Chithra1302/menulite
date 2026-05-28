@@ -1,96 +1,25 @@
-import { FoodCategory } from "./menu/interfaces/menu-item.interface";
+import "reflect-metadata";
 
-import { MenuRepository } from "./menu/menu.repository";
+import { NestFactory } from "@nestjs/core";
 
-import { MenuService } from "./menu/menu.service";
+import { AppModule } from "./app.module";
 
-import { AppError } from "./common/errors/app.error";
-
-const menuRepository = new MenuRepository();
-
-const menuService = new MenuService(menuRepository);
+import { AppExceptionFilter } from "./common/filters/app-exception.filter";
 
 async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
 
-  // --- VALID CREATE ---
-  console.log("=== Create Valid Item ===");
-  const coffee = await menuService.createMenuItem({
-    id: "1",
-    name: "Cold Coffee",
-    category: FoodCategory.BEVERAGE,
-    price: 120,
-    available: true,
-  });
-  console.log(coffee);
+  app.useGlobalFilters(new AppExceptionFilter());
 
-  // --- INVALID CREATE (Validation Error) ---
-  console.log("\n=== Create Invalid Item (negative price) ===");
-  try {
-    await menuService.createMenuItem({
-      id: "2",
-      name: "",
-      category: FoodCategory.SNACK,
-      price: -50,
-      available: true,
-    });
-  } catch (error) {
-    if (error instanceof AppError) {
-      console.log(`[${error.statusCode}] ${error.name}: ${error.message}`);
-    }
-  }
+  await app.listen(3000);
 
-  // --- VALID UPDATE ---
-  console.log("\n=== Update Item ===");
-  const updated = await menuService.updateMenuItem("1", {
-    price: 150,
-    name: "Iced Cold Coffee",
-  });
-  console.log(updated);
-
-  // --- NOT FOUND (Update) ---
-  console.log("\n=== Update Non-Existent Item ===");
-  try {
-    await menuService.updateMenuItem("999", { price: 200 });
-  } catch (error) {
-    if (error instanceof AppError) {
-      console.log(`[${error.statusCode}] ${error.name}: ${error.message}`);
-    }
-  }
-
-  // --- GET BY ID ---
-  console.log("\n=== Get By ID ===");
-  const found = await menuService.getMenuItemById("1");
-  console.log(found);
-
-  // --- NOT FOUND (Get) ---
-  console.log("\n=== Get Non-Existent Item ===");
-  try {
-    await menuService.getMenuItemById("999");
-  } catch (error) {
-    if (error instanceof AppError) {
-      console.log(`[${error.statusCode}] ${error.name}: ${error.message}`);
-    }
-  }
-
-  // --- DELETE ---
-  console.log("\n=== Delete Item ===");
-  const deleted = await menuService.deleteMenuItem("1");
-  console.log("Deleted:", deleted);
-
-  // --- NOT FOUND (Delete) ---
-  console.log("\n=== Delete Non-Existent Item ===");
-  try {
-    await menuService.deleteMenuItem("1");
-  } catch (error) {
-    if (error instanceof AppError) {
-      console.log(`[${error.statusCode}] ${error.name}: ${error.message}`);
-    }
-  }
-
-  // --- REMAINING ---
-  console.log("\n=== Remaining Items ===");
-  const remaining = await menuService.getAllMenuItems();
-  console.log(remaining);
+  console.log("MenuLite API is running on http://localhost:3000");
+  console.log("\nAvailable endpoints:");
+  console.log("  POST   http://localhost:3000/menu");
+  console.log("  GET    http://localhost:3000/menu");
+  console.log("  GET    http://localhost:3000/menu/:id");
+  console.log("  PATCH  http://localhost:3000/menu/:id");
+  console.log("  DELETE http://localhost:3000/menu/:id");
 }
 
 bootstrap();
