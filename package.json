@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "Lightweight cafe menu management backend API built with TypeScript",
   "main": "dist/main.js",
-
   "scripts": {
     "start": "ts-node src/main.ts",
     "dev": "nodemon",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest --config jest.config.ts",
+    "test:coverage": "jest --config jest.config.ts --coverage"
   },
-
   "keywords": [
     "typescript",
     "nestjs",
@@ -17,24 +17,24 @@
     "api",
     "menu-management"
   ],
-
   "author": "Chithra KG",
-
   "license": "ISC",
-
   "type": "commonjs",
-
   "dependencies": {
     "@nestjs/common": "^11.1.24",
     "@nestjs/core": "^11.1.24",
+    "@nestjs/platform-express": "^11.1.24",
+    "@types/express": "^5.0.6",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "zod": "^4.4.3"
   },
-
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^25.9.1",
+    "jest": "^30.4.2",
     "nodemon": "^3.1.14",
+    "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
   }
